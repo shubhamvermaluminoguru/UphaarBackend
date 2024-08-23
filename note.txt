@@ -1,0 +1,7 @@
+Create a model to save the home page layout of the app
+
+
+homePagelayout:
+
+[{title:"", type:"offer", content: ["21r32fgf", "72364823"]}, 
+{{title:"Birthday Special", type:"products", content:["1212", "2323"] }}]

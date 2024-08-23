@@ -1,4 +1,5 @@
 const UserControllers = require('./Controller/users');
+const ProductControllers = require('./Controller/product');
 
 const express = require('express');
 require('dotenv').config()
@@ -19,7 +20,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.get('/',(req, res, next) => {
   res.status(200).json({ message: 'Hello server is working fine' });
 }); 
@@ -27,7 +27,8 @@ app.get('/',(req, res, next) => {
 app.post('/signUp', UserControllers.signUp);
 app.post('/signIn', UserControllers.signIn);
 app.post('/getUser', authenticate, UserControllers.getUser);
-
+app.post('/addProduct', authenticate, ProductControllers.addProduct);
+app.get('/getProducts', ProductControllers.getAllProducts);
 
 app.listen(port,() => {
   console.log(`Server running on port ${port}`);
