@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema(
     profilePicture: { type: String, default: '' },
     phoneNumber: { type: String, default: '' },
     countryCode: { type: String, default: '' },
+    type: {type: String, default: 'user'}, // Possible values 'user' 'seller' 'admin' 'superAdmin
   },
   { timestamps: true }
 );

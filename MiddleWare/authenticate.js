@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 
-
 const authenticate = (req, res, next) => {
   const token = req.header('Authorization');
 
@@ -16,5 +15,6 @@ const authenticate = (req, res, next) => {
     return res.status(401).json({ message: 'Invalid token.' });
   }
 };
+
 
 module.exports = authenticate;

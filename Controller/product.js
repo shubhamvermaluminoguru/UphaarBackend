@@ -1,12 +1,13 @@
 const Products = require("../Models/product.js");
-
+const mongoose = require('mongoose');
 const addProduct = async (req, res) => {
     try {
-        const { title, description, price, crossPrice, images, categories, stock, filters } = req.body;
+        const {_id, title, description, price, crossPrice, images, categories, stock, filters } = req.body;
         if (!title || !description || !price || !crossPrice || !images || !categories || !stock ) {
             return res.status(400).json({ message: "Requred fields are missing", success: false });
         }
-        const product = new Products({
+        
+        const productData ={
             title,
             description,
             price,
@@ -14,9 +15,16 @@ const addProduct = async (req, res) => {
             images,
             categories,
             stock,
-            filters
-        });
-        await product.save();
+            filters,
+            sellerId: req?.user?.id
+        };
+
+        const product = await Products.findOneAndUpdate(
+                { _id: _id || new mongoose.Types.ObjectId()  }, // Filter
+                { $set: productData }, // Update
+                {new:true, upsert: true } // Options: return new document, create if not found
+            );
+
         res.status(200).json({ success: true, message: "Product added successfully", data: product });
     } catch (error) {
         console.error(error);
@@ -27,12 +35,12 @@ const addProduct = async (req, res) => {
 const getAllProducts = async (req, res) => {
     try {
         // Destructure query parameters with default values
-        let { page = 1, limit = 10, category, searchText, sortBy = 'title', sortOrder = 'asc', minPrice, maxPrice } = req.query;
-
+        let { page = 1, limit = 10, category, searchText, sortBy = 'createdAt', sortOrder = 'desc', minPrice, maxPrice, seller } = req.query;
+        
         // Convert page and limit to integers
         page = parseInt(page, 10);
         limit = parseInt(limit, 10);
-
+        console.log(page , limit , category, searchText, sortBy , sortOrder , minPrice, maxPrice )
         // Validate page and limit
         if (isNaN(page) || page < 1 || isNaN(limit) || limit < 1) {
             return res.status(400).json({ message: "Invalid page or limit value", success: false });
@@ -62,6 +70,10 @@ const getAllProducts = async (req, res) => {
             }
         }
 
+        if(seller){
+            query.sellerId = req.user.id
+        }
+
         // Prepare sorting options
         const sortOptions = {};
         if (sortBy) {
@@ -75,7 +87,7 @@ const getAllProducts = async (req, res) => {
             .limit(limit);
 
         // Respond with the products
-        res.status(200).json({ success: true, data: products, page });
+        res.status(200).json({ success: true, data: products, page, limit, searchText});
     } catch (error) {
         console.error("Error fetching products:", error);
         res.status(500).json({ message: "Something went wrong", success: false });

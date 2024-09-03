@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
@@ -11,6 +12,9 @@ const productSchema = new mongoose.Schema({
     reviews: {type: Array, default: []},
     stock: {type: Number, default: 0},
     filters: {type: Array, default: []},
+    selectionOption : {type: Array, default: []},
+
+    sellerId : {type: ObjectId, required: true},
 },
 { timestamps: true });
 
