@@ -1,5 +1,6 @@
 const UserControllers = require('./Controller/users');
 const ProductControllers = require('./Controller/product');
+const CartController = require('./Controller/cart')
 // const cors = require('cors');
 const express = require('express');
 require('dotenv').config()
@@ -8,7 +9,6 @@ const port = process.env.PORT || 4000;
 const db = require('./db.js');
 
 const authenticate = require('./MiddleWare/authenticate.js');
-
 
 db.connectDb(process.env.MONGO_URI)
 
@@ -41,6 +41,9 @@ app.post('/signIn', UserControllers.signIn);
 app.post('/sellerSignIn', UserControllers.sellerSignIn);
 app.post('/getUser', authenticate, UserControllers.getUser);
 app.post('/addProduct', authenticate, ProductControllers.addProduct);
+app.post('/addToCart', authenticate, CartController.addProductToCart);
+
+
 app.get('/getProducts',authenticate, ProductControllers.getAllProducts);
 
 app.listen(port,() => {
