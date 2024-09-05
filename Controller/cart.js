@@ -40,6 +40,7 @@ const getCart = async (req, res) => {
     try {
       const cart = await Cart.findOne({ userId: userId })
         .populate('products.productId')
+        .lean()
         .exec();
   
       if (!cart) {
@@ -48,18 +49,19 @@ const getCart = async (req, res) => {
   
       // Renaming 'productId' to 'product' in the result
       const modifiedCart = {
-        ...cart._doc, // Spread the rest of the cart object
+        ...cart, // Spread the rest of the cart object
         products: cart.products.map(item => {
           return {
-            ...item._doc, // Spread the rest of the product object
-            product: {...item.productId.toObject(), filters: item.toObject().filters}, // Rename 'productId' to 'product'
+            ...item, // Spread the rest of the product object
+            product: {...item.productId, filters: item.filters}, // Rename 'productId' to 'product'
             productId: undefined, // Optionally remove the original 'productId' field
-            filters: undefined
+            filters: undefined,
+            __v:undefined
           };
         })
       };
 
-      res.status(200).json(modifiedCart);
+      res.status(200).json({success:true, data:modifiedCart});
     } catch (error) {
       console.error('Error fetching cart:', error);
       res.status(500).json({ message: 'Internal server error' });

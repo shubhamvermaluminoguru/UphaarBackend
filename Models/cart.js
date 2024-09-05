@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 // Define the schema for cart items
 const cartItemSchema = new mongoose.Schema({
   productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
-  quantity: { type: Number, required: true }
+  quantity: { type: Number, required: true },
+  filters: {type: Array, default: []},
 });
 
 // Define the schema for the cart
