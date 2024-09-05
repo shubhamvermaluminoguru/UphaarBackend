@@ -42,7 +42,7 @@ app.post('/sellerSignIn', UserControllers.sellerSignIn);
 app.post('/getUser', authenticate, UserControllers.getUser);
 app.post('/addProduct', authenticate, ProductControllers.addProduct);
 app.post('/addToCart', authenticate, CartController.addProductToCart);
-
+app.post('/removeFromCart', authenticate, CartController.removeFromCart);
 
 app.get('/getProducts',authenticate, ProductControllers.getAllProducts);
 app.get('/getCart',authenticate, CartController.getCart);

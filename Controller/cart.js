@@ -68,7 +68,26 @@ const getCart = async (req, res) => {
     }
   };
 
+const removeFromCart = async(req, res) => {
+    try {
+        const { productId } = req.body;
+        const userId = req.user.id;
+        // Find the cart by userId
+        let cart = await Cart.findOne({ userId });
+        console.log(productId);
+        // Filter out the product with the matching productId from the products array
+        cart.products = cart.products.filter(product => product.productId.toString() !== productId);
+        // Save the updated cart
+        await cart.save();
+
+        res.status(200).send({ success: true ,message: 'Product removed from cart successfully' });
+    } catch (error) {
+        res.status(500).send({ message: 'Error removing product from cart', error });
+    }
+}
+
 module.exports = {
     addProductToCart,
-    getCart
+    getCart,
+    removeFromCart
 };
