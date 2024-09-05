@@ -45,6 +45,7 @@ app.post('/addToCart', authenticate, CartController.addProductToCart);
 
 
 app.get('/getProducts',authenticate, ProductControllers.getAllProducts);
+app.get('/getCart',authenticate, CartController.getCart);
 
 app.listen(port,() => {
   console.log(`Server running on port ${port}`);

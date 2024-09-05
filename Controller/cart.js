@@ -34,6 +34,39 @@ const addProductToCart = async (req, res) => {
     }
 };
 
+const getCart = async (req, res) => {
+    const userId = req.user.id 
+
+    try {
+      const cart = await Cart.findOne({ userId: userId })
+        .populate('products.productId')
+        .exec();
+  
+      if (!cart) {
+        return res.status(404).json({ message: 'Cart not found for user ID: ' + userId });
+      }
+  
+      // Renaming 'productId' to 'product' in the result
+      const modifiedCart = {
+        ...cart._doc, // Spread the rest of the cart object
+        products: cart.products.map(item => {
+          return {
+            ...item._doc, // Spread the rest of the product object
+            product: {...item.productId.toObject(), filters: item.toObject().filters}, // Rename 'productId' to 'product'
+            productId: undefined, // Optionally remove the original 'productId' field
+            filters: undefined
+          };
+        })
+      };
+
+      res.status(200).json(modifiedCart);
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+
 module.exports = {
-    addProductToCart
+    addProductToCart,
+    getCart
 };
