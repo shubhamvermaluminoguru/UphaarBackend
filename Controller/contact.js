@@ -30,9 +30,8 @@ const addContact = async(req, res) =>{
 const getContact = async(req, res) => {
     try {
         const userId = req.user.id;
-
         let contact = await Contact.find({userId})
-        console.log(contact);
+        
         res.status(200).send({ success: true, data: contact });
     } catch (error) {
       console.error('Error fetching cart:', error);

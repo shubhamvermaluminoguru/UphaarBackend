@@ -2,6 +2,7 @@ const UserControllers = require('./Controller/users');
 const ProductControllers = require('./Controller/product');
 const CartController = require('./Controller/cart')
 const ContactController = require('./Controller/contact')
+const OccasionController = require('./Controller/occasion')
 // const cors = require('cors');
 const express = require('express');
 require('dotenv').config()
@@ -45,10 +46,13 @@ app.post('/addProduct', authenticate, ProductControllers.addProduct);
 app.post('/addToCart', authenticate, CartController.addProductToCart);
 app.post('/removeFromCart', authenticate, CartController.removeFromCart);
 app.post('/addContact', authenticate, ContactController.addContact);
+app.post('/addOccasion', authenticate, OccasionController.addOccasion);
 
 app.get('/getProducts',authenticate, ProductControllers.getAllProducts);
 app.get('/getCart',authenticate, CartController.getCart);
 app.get('/getContacts',authenticate, ContactController.getContact);
+app.get('/getAllOccasions',authenticate, OccasionController.getAllOccasion);
+app.get('/getContactOccasions',authenticate, OccasionController.getContactOccasion);
 
 app.listen(port,() => {
   console.log(`Server running on port ${port}`);
