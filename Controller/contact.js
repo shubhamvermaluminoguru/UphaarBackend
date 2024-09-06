@@ -19,7 +19,7 @@ const addContact = async(req, res) =>{
                 address
             })
             await contact.save();
-            res.status(200).send({ success: true ,message: 'Contact Addded Successfully' });
+            res.status(200).send({ success: true ,message: 'Contact Addded Successfully', data: contact });
         }
         
     } catch (error) {
