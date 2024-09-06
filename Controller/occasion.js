@@ -23,7 +23,9 @@ const addOccasion = async(req, res) => {
 const getAllOccasion = async(req, res) => {
     try{
         const userId = req.user.id;
-        let occasion = await Occasion.find({userId});
+        let occasion = await Occasion.find({userId})
+        .populate('contactId')
+        .exec();
 
         res.status(200).send({ success: true, data: occasion });
     } catch (error) {
